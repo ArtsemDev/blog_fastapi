@@ -1,18 +1,18 @@
 from inspect import iscoroutinefunction
 from typing import Any, Type
 
-from sqlalchemy import Column, INT, create_engine
+from sqlalchemy import Column, INT, create_engine, select
 from sqlalchemy.orm import DeclarativeBase, declared_attr, sessionmaker
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
-
+from sqlalchemy import func
 
 class Base(DeclarativeBase):
     id = Column(INT, primary_key=True, autoincrement=True)
 
-    engine = create_engine('sqlite:///db.sqlite3')
+    engine = create_engine('postgresql://fastapi:fastapipassword@localhost:5432/blog')
     session = sessionmaker(bind=engine)
 
-    async_engine = create_async_engine('sqlite+aiosqlite:///db.sqlite3')
+    async_engine = create_async_engine('postgresql+asyncpg://fastapi:fastapipassword@localhost:5432/blog')
     async_session = async_sessionmaker(bind=async_engine)
 
     @declared_attr
@@ -52,3 +52,8 @@ class Base(DeclarativeBase):
     async def select(cls, sql: Any, session: AsyncSession = None):
         objs = await session.scalars(sql)
         return objs.all()
+
+    @classmethod
+    @create_session
+    async def count(cls, session: AsyncSession = None):
+        return len((await session.scalars(select(cls))).all())

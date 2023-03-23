@@ -10,6 +10,7 @@ class Post(Base):
     body: str = Column(TEXT, nullable=False)
     date_created: datetime = Column(TIMESTAMP, default=datetime.now())
     slug: str = Column(VARCHAR(150), nullable=False, unique=True)
+    image: str = Column(VARCHAR(256))
 
     def __repr__(self) -> str:
         return self.title

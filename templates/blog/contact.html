@@ -8,7 +8,13 @@ CONTACT
 
 {% include "blog/components/nav.html" %}
 
-{% include "blog/components/header.html" %}
+{% with %}
+    {% set heading='Contact' %}
+    {% set image='/blog/assets/img/contact-bg.jpg' %}
+    {% set directory='static' %}
+    {% include "blog/components/header.html" %}
+{% endwith %}
+
 <main class="mb-4">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
